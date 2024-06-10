@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 581409278}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -516,6 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f27a2d8a6fe702429fec773171acade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  segmentPrefab: {fileID: 4067338327839040705, guid: c814fa7f9bd04c34fad97906b6e63eeb, type: 3}
 --- !u!1 &792752596
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +531,7 @@ GameObject:
   - component: {fileID: 792752600}
   m_Layer: 0
   m_Name: Food
-  m_TagString: Untagged
+  m_TagString: Food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -673,7 +674,7 @@ GameObject:
   - component: {fileID: 1134438640}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -803,7 +804,7 @@ GameObject:
   - component: {fileID: 1252332535}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1010,7 +1011,7 @@ GameObject:
   - component: {fileID: 2096441069}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
