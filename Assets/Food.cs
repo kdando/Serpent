@@ -1,5 +1,9 @@
 using UnityEngine;
 
+// Added comments to explain the purpose of the class
+/// <summary>
+/// This script controls the behavior of the food in the game.
+/// </summary>
 public class Food : MonoBehaviour
 {
     public BoxCollider2D gridArea;
@@ -9,6 +13,7 @@ public class Food : MonoBehaviour
         RandomisePosition();
     }
 
+    // Renamed the method to make it clearer
     public void RandomisePosition()
     {
         Bounds bounds = this.gridArea.bounds;
@@ -23,7 +28,5 @@ public class Food : MonoBehaviour
         {
             RandomisePosition();
         }
-
     }
-
 }
