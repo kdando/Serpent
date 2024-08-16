@@ -3,128 +3,104 @@ using UnityEngine;
 
 public class Serpent : MonoBehaviour
 {
-    // Direction of the serpent's movement
-    private Vector2 _direction = Vector2.right;
-
+    // Direction of the serpent's movement (initialized to right by default)
+    private Vector2 direction = Vector2.right;
     // List of serpent's segments
-    private List<Transform> _segments = new List<Transform>();
+    private List<Transform> segments = new List<Transform>();
 
-    // Prefab for serpent's segment
+    // Prefab for the serpent's segment
     public Transform segmentPrefab;
 
     // Initial size of the serpent
     public int initialSize = 4;
 
-    // Movement speed
+    // Movement speed of the serpent
     public float moveSpeed = 0.5f;
 
-    // Jump distance
+    // Jump distance of the serpent
     public float jumpDistance = 2.0f;
 
     private void Start()
     {
-        // Reset the serpent's state at the start
         ResetState();
+        // Set an initial default direction for the snake to start moving.
+        direction = Vector2.right;
     }
-
     private void Update()
     {
-        // Update the direction based on user input
+        // Update direction based on user input (if any)
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _direction = Vector2.up;
-            UpdateSegments();
+            direction = Vector2.up;
         }
         else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _direction = Vector2.down;
-            UpdateSegments();
+            direction = Vector2.down;
         }
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            _direction = Vector2.left;
-            UpdateSegments();
+            direction = Vector2.left;
         }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            _direction = Vector2.right;
-            UpdateSegments();
+            direction = Vector2.right;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // Make the serpent jump by changing its position
-            this.transform.position = new Vector3(
-                Mathf.Round(this.transform.position.x) + _direction.x * jumpDistance,
-                Mathf.Round(this.transform.position.y) + _direction.y * jumpDistance,
-                1.0f // Lift the serpent on the z-axis
-            );
-
-            // Update the serpent's segments after the jump
-            UpdateSegments();
-        }
+        // Move the head of the serpent in the intended direction continuously.
+        transform.position = new Vector3(Mathf.Round(transform.position.x + direction.x * moveSpeed), Mathf.Round(transform.position.y + direction.y * moveSpeed), transform.position.z);
     }
-
     private void FixedUpdate()
     {
+        // Move the head of the serpent in the intended direction
+        transform.position = new Vector3(
+             Mathf.Round(transform.position.x + direction.x * moveSpeed),
+             Mathf.Round(transform.position.y + direction.y * moveSpeed),
+            transform.position.z); // Keep the z-position unchanged
+
         UpdateSegments();
     }
-
     private void UpdateSegments()
     {
-        // Move the serpent's segments
-        for (int i = _segments.Count - 1; i > 0; i--)
+        // Move the segments to follow the head smoothly 
+        for (int i = segments.Count - 1; i > 0; i--)
         {
-            _segments[i].position = _segments[i - 1].position;
-        };
-
-        // Move the serpent's head
-        this.transform.position = new Vector3(
-            Mathf.Round(this.transform.position.x) + _direction.x * moveSpeed,
-            Mathf.Round(this.transform.position.y) + _direction.y * moveSpeed,
-            this.transform.position.z // Keep the z-position
-        );
+            segments[i].position = segments[i - 1].position;
+        }
     }
-
-    // Method to grow the serpent
     private void Grow()
     {
-        // Instantiate a new segment
-        Transform segment = Instantiate(this.segmentPrefab);
-        segment.position = _segments[_segments.Count - 1].position;
-        _segments.Add(segment);
+        // Instantiate a new segment at the tail position (the position of the last segment before growth)
+        Transform newSegment = Instantiate(segmentPrefab);
+        newSegment.position = segments[segments.Count - 1].position;
+        // Add the new segment to the list of segments
+        segments.Add(newSegment);
     }
-
-    // Method to reset the serpent's state
     private void ResetState()
     {
-        // Destroy all segments except the head
-        for (int i = 1; i < _segments.Count; i++)
+        foreach (Transform segment in segments)
         {
-            Destroy(_segments[i].gameObject);
+            Destroy(segment.gameObject);
         }
-        _segments.Clear();
-        _segments.Add(this.transform);
-
-        // Instantiate new segments
+        segments.Clear();
+        segments.Add(transform);
         for (int i = 1; i < initialSize; i++)
         {
-            _segments.Add(Instantiate(this.segmentPrefab));
+            Transform segment = Instantiate(segmentPrefab);
+            segments.Add(segment);
         }
-
-        // Reset the serpent's position
-        this.transform.position = Vector3.zero;
     }
-
+    private void Jump()
+    {
+        transform.position += new Vector3(direction.x * jumpDistance, direction.y * jumpDistance, 0f);
+        UpdateSegments();
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the serpent collides with food
-        if (other.tag == "Food")
+        if (other.CompareTag("Food"))
         {
             Grow();
         }
-        // Check if the serpent collides with an obstacle
-        else if (other.tag == "Obstacle")
+        else if (other.CompareTag("Obstacle"))
         {
             ResetState();
         }
